@@ -10,7 +10,7 @@
 <script>
   tailwind.config = { theme: { extend: {
     fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-    colors: { ink: '#111114', ink2: '#3B3B3E', paper: '#FAFAF8', accent: '#6B4BFF', accent2: '#12C29E', amber: '#F5A524' },
+    colors: { ink: '#111114', ink2: '#3B3B3E', paper: '#FAFAF8', accent: '#6B4BFF', accent2: '#12C29E', amber: '#F5A524', sky: '#38BDF8' },
   }}};
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -201,7 +201,7 @@
         <textarea id="src" rows="3" data-i18n-ph="demo.ph" placeholder="Your order shipped this morning — tracking is on the way!" class="w-full mt-3 bg-white/5 border border-white/15 rounded-lg px-3 py-2 text-sm"></textarea>
         <button id="translate" class="btn btn-accent mt-3 w-full" data-i18n="demo.btn">Translate →</button>
         <div id="out" class="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm min-h-[3rem] text-white/80" data-i18n="demo.outph">Output will appear here…</div>
-        <p class="text-[11px] text-white/45 mt-2" data-i18n="demo.note">Demo uses a local dictionary — production Franklinn uses context-aware LLM translation tuned for customer service.</p>
+        <p class="text-[11px] text-white/45 mt-2" data-i18n="demo.note">Live demo powered by our public translation API. Production Franklinn uses context-aware LLM translation tuned for customer service.</p>
       </div>
     </div>
   </div>
@@ -256,9 +256,10 @@
       <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="shield.title">Your accounts don't get banned on our watch.</h2>
       <p class="mt-4 text-white/70" data-i18n="shield.desc">Most mass translation tools trigger bot detection — messages too fast, too similar, too robotic. Franklinn is built from the ground up to look human to every platform.</p>
     </div>
-    <div class="grid md:grid-cols-4 gap-4 mt-12">
+    <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4 mt-12">
       <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-accent/20 text-accent grid place-items-center mb-3">⚡</div><h3 class="font-bold" data-i18n="shield.p1t">Human-paced delivery</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p1d">Adaptive delays and typing indicators match each platform's organic patterns — no burst sends, no suspicious uniformity.</p></div>
       <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-accent2/20 text-accent2 grid place-items-center mb-3">🌐</div><h3 class="font-bold" data-i18n="shield.p2t">Residential IP routing</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p2d">Each Seat is pinned to a clean residential IP in your region. No datacenter fingerprints, no geo-anomalies.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-sky/20 text-sky grid place-items-center mb-3">🧬</div><h3 class="font-bold" data-i18n="shield.p5t">Browser fingerprint shield</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p5d">Each Seat runs in an isolated browser profile with randomized canvas, WebGL, fonts, and timezone signatures — platforms can't correlate your accounts across Seats.</p></div>
       <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-amber/20 text-amber grid place-items-center mb-3">🎭</div><h3 class="font-bold" data-i18n="shield.p3t">Style randomization</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p3d">Subtle rephrasing and emoji variance prevent repetition signatures that platforms flag as spam.</p></div>
       <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-white/10 text-white grid place-items-center mb-3">👁️</div><h3 class="font-bold" data-i18n="shield.p4t">Risk radar</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p4d">Live health score per account, warnings before limits trigger, and auto-throttle if a channel looks stressed.</p></div>
     </div>
@@ -486,7 +487,7 @@ const I18N = {
   "demo.ph": "Your order shipped this morning — tracking is on the way!",
   "demo.btn": "Translate →",
   "demo.outph": "Output will appear here…",
-  "demo.note": "Demo uses a local dictionary — production Franklinn uses context-aware LLM translation tuned for customer service.",
+  "demo.note": "Live demo powered by our public translation API. Production Franklinn uses context-aware LLM translation tuned for customer service.",
   "ai.chip": "AI Copilot",
   "ai.ready": "ready",
   "ai.ask": "Ask",
@@ -517,6 +518,8 @@ const I18N = {
   "shield.p3d": "Subtle rephrasing and emoji variance prevent repetition signatures that platforms flag as spam.",
   "shield.p4t": "Risk radar",
   "shield.p4d": "Live health score per account, warnings before limits trigger, and auto-throttle if a channel looks stressed.",
+  "shield.p5t": "Browser fingerprint shield",
+  "shield.p5d": "Each Seat runs in an isolated browser profile with randomized canvas, WebGL, fonts, and timezone signatures — platforms can't correlate your accounts across Seats.",
   "shield.s1": "account uptime (last 12mo)",
   "shield.s2": "permanent bans on Growth+ tier",
   "shield.s3": "median risk-alert response",
@@ -643,7 +646,7 @@ const I18N = {
   "demo.ph": "您的订单今早已发货——物流单号即将送达！",
   "demo.btn": "翻译 →",
   "demo.outph": "翻译结果将显示在这里……",
-  "demo.note": "演示版使用本地词典；正式版 Franklinn 采用针对客户服务场景精调的上下文感知 LLM 翻译引擎。",
+  "demo.note": "实时演示由我们的公开翻译 API 提供支持。正式版 Franklinn 采用针对客户服务场景精调的上下文感知 LLM 翻译引擎。",
   "ai.chip": "AI 智能助手",
   "ai.ready": "就绪",
   "ai.ask": "提问",
@@ -674,6 +677,8 @@ const I18N = {
   "shield.p3d": "微妙的措辞变换与 emoji 差异化，有效避免被平台识别为垃圾信息的重复特征。",
   "shield.p4t": "风险雷达",
   "shield.p4d": "每个账号实时健康评分，在触发限制前提前预警，并在渠道压力过大时自动降速。",
+  "shield.p5t": "浏览器指纹防护",
+  "shield.p5d": "每个坐席运行于独立的浏览器配置中，canvas、WebGL、字体、时区等指纹均经过随机化处理，平台无法将你的多个坐席账号关联起来。",
   "shield.s1": "账号正常运行率（过去 12 个月）",
   "shield.s2": "Growth+ 套餐永久封号次数",
   "shield.s3": "风险预警中位响应时间",
@@ -800,7 +805,7 @@ const I18N = {
   "demo.ph": "Your order shipped this morning — tracking is on the way!",
   "demo.btn": "翻譯 →",
   "demo.outph": "翻譯結果將顯示於此…",
-  "demo.note": "Demo 使用本地詞典；正式版 Franklinn 採用專為客服場景調校的上下文感知 LLM 翻譯引擎。",
+  "demo.note": "即時 Demo 由我們的公開翻譯 API 提供支援。正式版 Franklinn 採用專為客服場景調校的上下文感知 LLM 翻譯引擎。",
   "ai.chip": "AI 智能助理",
   "ai.ready": "就緒",
   "ai.ask": "詢問",
@@ -831,6 +836,8 @@ const I18N = {
   "shield.p3d": "細微的改寫與表情符號變化，防止被平台識別為垃圾訊息的重複特徵。",
   "shield.p4t": "風險雷達",
   "shield.p4d": "每個帳號即時健康評分，在觸發限制前預警，管道出現壓力時自動節流。",
+  "shield.p5t": "瀏覽器指紋防護",
+  "shield.p5d": "每個坐席在獨立的瀏覽器設定檔中運行，canvas、WebGL、字型、時區等指紋皆經過隨機化處理，平台無法將你的多個坐席帳號關聯起來。",
   "shield.s1": "帳號正常運行時間（過去 12 個月）",
   "shield.s2": "Growth+ 方案永久封號次數",
   "shield.s3": "風險警報中位回應時間",
@@ -915,32 +922,48 @@ const I18N = {
 };
 
 
-// ===== Demo translation dictionary =====
-const DEMO_DICT = {
-  "your order shipped this morning — tracking is on the way!": {
-    "ja": "ご注文は今朝出荷されました。追跡番号は間もなくお送りします！",
-    "ko": "주문 상품이 오늘 아침 발송되었습니다. 송장 번호는 곧 전달드립니다!",
-    "zh-CN": "您的订单已于今早发货，运单号稍后发送！",
-    "zh-TW": "您的訂單已於今早出貨，貨運單號稍後送達！",
-    "es": "¡Tu pedido se envió esta mañana, el número de seguimiento va en camino!",
-    "fr": "Votre commande est expédiée ce matin — le suivi arrive !",
-    "de": "Ihre Bestellung ist heute Morgen verschickt worden — Sendungsnummer folgt!",
-    "ar": "تم شحن طلبك هذا الصباح — رقم التتبع في الطريق!",
-    "pt": "Seu pedido foi enviado esta manhã — o rastreamento está a caminho!"
-  },
-  "hello, when will my order arrive?": {
-    "ja": "こんにちは、注文はいつ届きますか？",
-    "ko": "안녕하세요, 주문은 언제 도착하나요?",
-    "zh-CN": "您好，我的订单什么时候到？",
-    "zh-TW": "您好，我的訂單什麼時候會到？",
-    "es": "Hola, ¿cuándo llegará mi pedido?",
-    "fr": "Bonjour, quand ma commande arrivera-t-elle ?",
-    "de": "Hallo, wann kommt meine Bestellung an?",
-    "ar": "مرحبًا، متى سيصل طلبي؟",
-    "pt": "Olá, quando meu pedido vai chegar?"
+// ===== Demo translate (MyMemory API) =====
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));}
+const TX_CACHE = new Map();
+document.getElementById("translate").addEventListener("click", async () => {
+  const defaultSrc = "Your order shipped this morning — tracking is on the way!";
+  const src = (document.getElementById("src").value || defaultSrc).trim();
+  const target = document.getElementById("tlang").value;
+  const out = document.getElementById("out");
+  const btn = document.getElementById("translate");
+  if (!src) return;
+  // Source detection: CJK => zh-CN, else en (MyMemory rejects "auto")
+  const hasCJK = /[\u4e00-\u9fff\u3040-\u30ff\uac00-\ud7af]/.test(src);
+  const source = hasCJK ? "zh-CN" : "en";
+  if (source.toLowerCase() === target.toLowerCase()) {
+    out.innerHTML = '<div class="font-medium">' + escapeHtml(src) + '</div><div class="text-[11px] text-white/45 mt-1">→ same language, no translation needed</div>';
+    return;
   }
-};
-const DEMO_GENERIC = {"ja": "（翻訳）", "ko": "（번역）", "zh-CN": "（翻译）", "zh-TW": "（翻譯）", "es": "(traducción)", "fr": "(traduction)", "de": "(Übersetzung)", "ar": "(ترجمة)", "pt": "(tradução)"};
+  const cacheKey = source + "|" + target + "||" + src;
+  if (TX_CACHE.has(cacheKey)) {
+    const cached = TX_CACHE.get(cacheKey);
+    out.innerHTML = '<div class="font-medium">' + escapeHtml(cached) + '</div><div class="text-[11px] text-white/45 mt-1">→ ' + escapeHtml(src) + '</div>';
+    return;
+  }
+  out.innerHTML = '<span class="opacity-50">Translating…</span>';
+  btn.disabled = true;
+  try {
+    const url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(src) + "&langpair=" + encodeURIComponent(source + "|" + target) + "&de=hello@franklinn.com";
+    const r = await fetch(url);
+    const j = await r.json();
+    const status = j && j.responseStatus;
+    if (status !== 200 && status !== "200") {
+      throw new Error((j && j.responseDetails) || ("status " + status));
+    }
+    const result = (j.responseData && j.responseData.translatedText) || "(no translation)";
+    TX_CACHE.set(cacheKey, result);
+    out.innerHTML = '<div class="font-medium">' + escapeHtml(result) + '</div><div class="text-[11px] text-white/45 mt-1">→ ' + escapeHtml(src) + '</div>';
+  } catch (e) {
+    out.innerHTML = '<span class="text-amber">Translation failed: ' + escapeHtml(e.message || "network error") + '</span>';
+  } finally {
+    btn.disabled = false;
+  }
+});
 
 // ===== i18n apply =====
 const LANG_LABEL = { "en":"EN", "zh-CN":"中文", "zh-TW":"繁中" };
@@ -987,21 +1010,6 @@ langMenu.querySelectorAll("[data-setlang]").forEach(b => {
     setLang(b.getAttribute("data-setlang"));
     langMenu.classList.add("hidden");
   });
-});
-
-// ===== Demo translate =====
-document.getElementById("translate").addEventListener("click", () => {
-  const defaultSrc = "Your order shipped this morning — tracking is on the way!";
-  const src = (document.getElementById("src").value || defaultSrc).trim();
-  const lang = document.getElementById("tlang").value;
-  const out = document.getElementById("out");
-  out.innerHTML = '<span class="opacity-50">Translating…</span>';
-  setTimeout(() => {
-    const key = src.toLowerCase();
-    const hit = DEMO_DICT[key] && DEMO_DICT[key][lang];
-    const result = hit || (src + " " + (DEMO_GENERIC[lang] || ""));
-    out.innerHTML = '<div class="font-medium">' + result + '</div><div class="tiny mt-1">→ ' + src + '</div>';
-  }, 420);
 });
 
 // ===== Signup =====
