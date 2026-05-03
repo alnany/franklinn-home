@@ -1,0 +1,1043 @@
+<!doctype html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Franklinn — Real-time AI translation for global customer service</title>
+<meta name="description" content="Talk to every customer in their language. Franklinn translates Telegram, WhatsApp, Discord, and Instagram DMs in real time — with account protection and an AI data copilot. Free to try. Pay with card or USDT." />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><path d='M14 30 Q14 22 22 22 L78 22 Q86 22 86 30 L86 58 Q86 66 78 66 L52 66 L40 78 L40 66 L22 66 Q14 66 14 58 Z' fill='%233B3B3E'/><path d='M34 50 Q34 42 42 42 L98 42 Q106 42 106 50 L106 78 Q106 86 98 86 L72 86 L60 98 L60 86 L42 86 Q34 86 34 78 Z' fill='%23111114'/><path d='M52 62 L86 62 M52 74 L74 74' stroke='%23FAFAF8' stroke-width='5' stroke-linecap='square' fill='none'/></svg>" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+    colors: { ink: '#111114', ink2: '#3B3B3E', paper: '#FAFAF8', accent: '#6B4BFF', accent2: '#12C29E', amber: '#F5A524' },
+  }}};
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;800&family=Noto+Sans+TC:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  html[data-lang="zh-CN"] body { font-family: 'Noto Sans SC', Inter, system-ui, sans-serif; }
+  html[data-lang="zh-TW"] body { font-family: 'Noto Sans TC', Inter, system-ui, sans-serif; }
+  .chip{display:inline-flex;align-items:center;gap:.4rem;padding:.25rem .6rem;border-radius:999px;border:1px solid rgba(0,0,0,.1);font-size:.75rem;background:#fff}
+  .dot{width:.4rem;height:.4rem;border-radius:999px;background:#12C29E;box-shadow:0 0 0 3px rgba(18,194,158,.2)}
+  .card{background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:18px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;padding:.7rem 1.1rem;border-radius:12px;font-weight:600;transition:all .15s ease;cursor:pointer;white-space:nowrap}
+  .btn-primary{background:#111114;color:#fff} .btn-primary:hover{background:#000;transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:#111114;border:1px solid rgba(0,0,0,.15)} .btn-ghost:hover{background:#111114;color:#fff}
+  .btn-accent{background:#6B4BFF;color:#fff} .btn-accent:hover{background:#5a3ce8;transform:translateY(-1px)}
+  .marquee{mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+  .marquee-track{animation:scroll 35s linear infinite;display:flex;gap:3rem;width:max-content}
+  @keyframes scroll{to{transform:translateX(-50%)}}
+  .msg{border-radius:14px;padding:.6rem .85rem;max-width:78%;font-size:.875rem;line-height:1.45}
+  .msg-in{background:#fff;border:1px solid rgba(0,0,0,.08)}
+  .msg-out{background:#111114;color:#fff;margin-left:auto}
+  .tiny{font-size:.7rem;opacity:.6;margin-top:.2rem}
+  details > summary { cursor: pointer; list-style: none; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .chev { transform: rotate(180deg); }
+  .tab-active{background:#111114;color:#fff}
+  .glow{position:absolute;inset:-1rem;filter:blur(60px);opacity:.35;z-index:-1;border-radius:40px;background:linear-gradient(135deg,#6B4BFF,#12C29E)}
+</style>
+</head>
+<body class="bg-paper text-ink font-sans antialiased">
+
+<!-- NAV -->
+<header class="sticky top-0 z-50 backdrop-blur bg-paper/80 border-b border-black/5">
+  <div class="max-w-6xl mx-auto flex items-center justify-between px-5 py-3 gap-4">
+    <a href="#top" class="flex items-center gap-2" aria-label="Franklinn home">
+      <svg width="32" height="32" viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M14 30 Q14 22 22 22 L78 22 Q86 22 86 30 L86 58 Q86 66 78 66 L52 66 L40 78 L40 66 L22 66 Q14 66 14 58 Z" fill="#3B3B3E"></path>
+        <path d="M34 50 Q34 42 42 42 L98 42 Q106 42 106 50 L106 78 Q106 86 98 86 L72 86 L60 98 L60 86 L42 86 Q34 86 34 78 Z" fill="#111114"></path>
+        <path d="M52 62 L86 62 M52 74 L74 74" stroke="#FAFAF8" stroke-width="5" stroke-linecap="square" fill="none"></path>
+      </svg>
+      <span class="font-extrabold tracking-tight text-lg">Franklinn</span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-6 text-sm text-ink/70">
+      <a href="#how" data-i18n="nav.how" class="hover:text-ink">How it works</a>
+      <a href="#ai" data-i18n="nav.ai" class="hover:text-ink">AI Copilot</a>
+      <a href="#shield" data-i18n="nav.shield" class="hover:text-ink">Account Shield</a>
+      <a href="#pricing" data-i18n="nav.pricing" class="hover:text-ink">Pricing</a>
+      <a href="#faq" data-i18n="nav.faq" class="hover:text-ink">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-2">
+      <div class="relative">
+        <button id="lang-btn" class="btn btn-ghost text-sm !px-3 !py-2" aria-haspopup="listbox" aria-expanded="false">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 0 1 0 20M12 2a15 15 0 0 0 0 20"/></svg>
+          <span id="lang-label">EN</span>
+          <svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 3l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/></svg>
+        </button>
+        <ul id="lang-menu" class="hidden absolute right-0 mt-2 w-44 card p-1 text-sm z-50" role="listbox">
+          <li><button data-setlang="en" class="w-full text-left px-3 py-2 rounded-lg hover:bg-paper">🇺🇸 English</button></li>
+          <li><button data-setlang="zh-CN" class="w-full text-left px-3 py-2 rounded-lg hover:bg-paper">🇨🇳 简体中文</button></li>
+          <li><button data-setlang="zh-TW" class="w-full text-left px-3 py-2 rounded-lg hover:bg-paper">🇹🇼 繁體中文</button></li>
+        </ul>
+      </div>
+      <a href="https://app.franklinn.com/login" data-i18n="nav.login" class="text-sm text-ink/70 hover:text-ink hidden sm:inline-flex">Log in</a>
+      <a href="#demo" data-i18n="nav.demo" class="btn btn-ghost text-sm hidden sm:inline-flex">Try demo</a>
+      <a href="#signup" data-i18n="nav.signup" class="btn btn-primary text-sm">Get started</a>
+    </div>
+  </div>
+</header>
+
+
+<!-- HERO -->
+<section id="top" class="relative overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5 pt-16 pb-20 md:pt-24 md:pb-24 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <span class="chip"><span class="dot"></span> <span data-i18n="hero.chip">Live translation · 50+ languages · Account-safe</span></span>
+      <h1 class="mt-5 text-4xl md:text-6xl font-extrabold tracking-tight leading-[1.05]">
+        <span data-i18n="hero.t1">Talk to every customer in</span> <span class="text-accent" data-i18n="hero.h">their language.</span>
+      </h1>
+      <p class="mt-5 text-lg text-ink/70 max-w-xl" data-i18n="hero.desc">Franklinn drops real-time AI translation into Telegram, WhatsApp, Discord and Instagram DMs — your team types in one language, customers see native. No app switch, no latency, no account bans.</p>
+      <div class="mt-7 flex flex-wrap gap-3">
+        <a href="#demo" class="btn btn-primary" data-i18n="hero.cta1">Try it free, no signup →</a>
+        <a href="#pricing" class="btn btn-ghost" data-i18n="hero.cta2">See pricing</a>
+      </div>
+      <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-ink/55">
+        <span data-i18n="hero.b1">✓ 100 free translations / day</span>
+        <span data-i18n="hero.b2">✓ Pay with card or USDT</span>
+        <span data-i18n="hero.b3">✓ Account-ban protection built in</span>
+      </div>
+    </div>
+    <div class="relative">
+      <div class="glow"></div>
+      <div class="card p-4 md:p-5 shadow-[0_30px_80px_-20px_rgba(17,17,20,.25)]">
+        <div class="flex items-center gap-2 pb-3 border-b border-black/5">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-accent to-accent2"></div>
+          <div>
+            <div class="text-sm font-semibold" data-i18n="chat.name">Keiko · Tokyo</div>
+            <div class="text-[10px] text-ink/55" data-i18n="chat.meta">Telegram · typing in 日本語</div>
+          </div>
+          <span class="ml-auto chip text-[10px]"><span class="dot"></span> <span data-i18n="chat.live">live</span></span>
+        </div>
+        <div class="py-4 space-y-3">
+          <div class="msg msg-in">こんにちは、昨日注文した商品はいつ届きますか？<div class="tiny">→ <span data-i18n="chat.m1tr">Hi, when will yesterday's order arrive?</span></div></div>
+          <div class="msg msg-out"><span data-i18n="chat.m2">Hey Keiko — it shipped this morning, ETA Friday. Tracking link coming up.</span><div class="tiny opacity-75">→ ケイコさん — 今朝出荷しました。金曜到着予定です。</div></div>
+          <div class="msg msg-in">ありがとうございます！😊<div class="tiny">→ <span data-i18n="chat.m3tr">Thank you! 😊</span></div></div>
+        </div>
+        <div class="flex items-center gap-2 pt-3 border-t border-black/5">
+          <input disabled data-i18n-ph="chat.ph" placeholder="Type in your language — send in theirs" class="flex-1 bg-paper rounded-lg px-3 py-2 text-sm border border-black/5"/>
+          <button class="btn btn-accent text-xs" data-i18n="chat.send">Send</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="marquee border-y border-black/5 bg-white/60 py-3">
+    <div class="marquee-track text-sm font-medium text-ink/60">
+      <div class="flex gap-10"><span>🇯🇵 日本語</span><span>🇰🇷 한국어</span><span>🇨🇳 简体中文</span><span>🇹🇼 繁體中文</span><span>🇪🇸 Español</span><span>🇫🇷 Français</span><span>🇩🇪 Deutsch</span><span>🇸🇦 العربية</span><span>🇧🇷 Português</span><span>🇷🇺 Русский</span><span>🇻🇳 Tiếng Việt</span><span>🇹🇭 ภาษาไทย</span><span>🇮🇩 Bahasa</span><span>🇮🇳 हिन्दी</span><span>🇹🇷 Türkçe</span></div>
+      <div class="flex gap-10" aria-hidden="true"><span>🇯🇵 日本語</span><span>🇰🇷 한국어</span><span>🇨🇳 简体中文</span><span>🇹🇼 繁體中文</span><span>🇪🇸 Español</span><span>🇫🇷 Français</span><span>🇩🇪 Deutsch</span><span>🇸🇦 العربية</span><span>🇧🇷 Português</span><span>🇷🇺 Русский</span><span>🇻🇳 Tiếng Việt</span><span>🇹🇭 ภาษาไทย</span><span>🇮🇩 Bahasa</span><span>🇮🇳 हिन्दी</span><span>🇹🇷 Türkçe</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section id="how" class="max-w-6xl mx-auto px-5 py-24">
+  <div class="flex items-end justify-between flex-wrap gap-4 mb-12">
+    <div>
+      <span class="chip" data-i18n="how.chip">How it works</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="how.title">From zero to bilingual in 3 minutes.</h2>
+    </div>
+    <a href="#demo" class="btn btn-ghost text-sm" data-i18n="how.skip">Skip to live demo →</a>
+  </div>
+  <div class="grid md:grid-cols-3 gap-5">
+    <div class="card p-6"><div class="w-9 h-9 rounded-lg bg-ink text-white grid place-items-center font-bold">1</div><h3 class="mt-4 font-bold text-lg" data-i18n="how.s1t">Connect a channel</h3><p class="mt-2 text-ink/60 text-sm" data-i18n="how.s1d">Plug in Telegram, WhatsApp Business, Discord or Instagram. One-click OAuth, no backend work.</p></div>
+    <div class="card p-6"><div class="w-9 h-9 rounded-lg bg-ink text-white grid place-items-center font-bold">2</div><h3 class="mt-4 font-bold text-lg" data-i18n="how.s2t">Your team types natively</h3><p class="mt-2 text-ink/60 text-sm" data-i18n="how.s2d">Messages auto-translate to each customer's language with context memory — names, slang, product terms stay consistent.</p></div>
+    <div class="card p-6"><div class="w-9 h-9 rounded-lg bg-ink text-white grid place-items-center font-bold">3</div><h3 class="mt-4 font-bold text-lg" data-i18n="how.s3t">Customers feel at home</h3><p class="mt-2 text-ink/60 text-sm" data-i18n="how.s3d">They see native, you see your language. Tone-adjusted, under 400ms. No translator-bot awkwardness.</p></div>
+  </div>
+</section>
+
+<!-- CHANNELS + DEMO -->
+<section id="channels" class="bg-ink text-white">
+  <div class="max-w-6xl mx-auto px-5 py-24 grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <span class="chip bg-white/10 border-white/20 text-white" data-i18n="ch.chip">Channels</span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="ch.title">Works where your customers already are.</h2>
+      <p class="mt-4 text-white/70" data-i18n="ch.desc">One Seat = one connected account. Mix and match — a small team on Growth can cover 10 channels across regions.</p>
+      <div class="grid grid-cols-2 gap-3 mt-6 max-w-md">
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#26A5E4" aria-hidden="true"><path d="M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z"/></svg>
+          <span>Telegram</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.05 21.785h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884zm8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          <span>WhatsApp Business</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#5865F2" aria-hidden="true"><path d="M20.317 4.3698a19.7913 19.7913 0 00-4.8851-1.5152.0741.0741 0 00-.0785.0371c-.211.3753-.4447.8648-.6083 1.2495-1.8447-.2762-3.68-.2762-5.4868 0-.1636-.3933-.4058-.8742-.6177-1.2495a.077.077 0 00-.0785-.037 19.7363 19.7363 0 00-4.8852 1.515.0699.0699 0 00-.0321.0277C.5334 9.0458-.319 13.5799.0992 18.0578a.0824.0824 0 00.0312.0561c2.0528 1.5076 4.0413 2.4228 5.9929 3.0294a.0777.0777 0 00.0842-.0276c.4616-.6304.8731-1.2952 1.226-1.9942a.076.076 0 00-.0416-.1057c-.6528-.2476-1.2743-.5495-1.8722-.8923a.077.077 0 01-.0076-.1277c.1258-.0943.2517-.1923.3718-.2914a.0743.0743 0 01.0776-.0105c3.9278 1.7933 8.18 1.7933 12.0614 0a.0739.0739 0 01.0785.0095c.1202.099.246.1981.3728.2924a.077.077 0 01-.0066.1276 12.2986 12.2986 0 01-1.873.8914.0766.0766 0 00-.0407.1067c.3604.698.7719 1.3628 1.225 1.9932a.076.076 0 00.0842.0286c1.961-.6067 3.9495-1.5219 6.0023-3.0294a.077.077 0 00.0313-.0552c.5004-5.177-.8382-9.6739-3.5485-13.6604a.061.061 0 00-.0312-.0286zM8.02 15.3312c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9555-2.4189 2.157-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419-.0189 1.3332-.9555 2.4189-2.1569 2.4189zm7.9748 0c-1.1825 0-2.1569-1.0857-2.1569-2.419 0-1.3332.9554-2.4189 2.1569-2.4189 1.2108 0 2.1757 1.0952 2.1568 2.419 0 1.3332-.946 2.4189-2.1568 2.4189Z"/></svg>
+          <span>Discord</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#E4405F" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <span>Instagram DM</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#00C300" aria-hidden="true"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
+          <span>LINE</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#0084FF" aria-hidden="true"><path d="M.001 11.639C.001 4.949 5.241 0 12 0s12 4.95 12 11.639c0 6.689-5.241 11.638-12 11.638-1.214 0-2.376-.159-3.466-.454a.96.96 0 00-.64.05l-2.381 1.05a.96.96 0 01-1.347-.852l-.065-2.137a.959.959 0 00-.322-.684C1.48 18.18 0 15.112 0 11.639zm8.339-2.19l-3.525 5.592a.568.568 0 00.853.763l3.791-2.883a.723.723 0 01.873 0l2.811 2.11a1.8 1.8 0 002.611-.481l3.525-5.592a.567.567 0 00-.854-.762l-3.791 2.882a.723.723 0 01-.872 0L10.95 8.967a1.8 1.8 0 00-2.611.482z"/></svg>
+          <span>Messenger</span>
+        </div>
+        <div class="flex items-center gap-2 text-sm bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+          <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#E01E5A" d="M5.042 15.165a2.528 2.528 0 01-2.52 2.523A2.528 2.528 0 010 15.165a2.527 2.527 0 012.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 012.521-2.52 2.527 2.527 0 012.521 2.52v6.313A2.528 2.528 0 018.834 24a2.528 2.528 0 01-2.521-2.522v-6.313z"/><path fill="#36C5F0" d="M8.834 5.042a2.528 2.528 0 01-2.521-2.52A2.528 2.528 0 018.834 0a2.528 2.528 0 012.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 012.521 2.521 2.528 2.528 0 01-2.521 2.521H2.522A2.528 2.528 0 010 8.834a2.528 2.528 0 012.522-2.521h6.312z"/><path fill="#2EB67D" d="M18.956 8.834a2.528 2.528 0 012.522-2.521A2.528 2.528 0 0124 8.834a2.528 2.528 0 01-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 01-2.523 2.521 2.527 2.527 0 01-2.52-2.521V2.522A2.527 2.527 0 0115.165 0a2.528 2.528 0 012.523 2.522v6.312z"/><path fill="#ECB22E" d="M15.165 18.956a2.528 2.528 0 012.523 2.522A2.528 2.528 0 0115.165 24a2.527 2.527 0 01-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 01-2.52-2.523 2.526 2.526 0 012.52-2.52h6.313A2.527 2.527 0 0124 15.165a2.528 2.528 0 01-2.522 2.523h-6.313z"/></svg>
+          <span>Slack</span>
+        </div>
+      </div>
+      <p class="mt-4 text-xs text-white/40" data-i18n="ch.note">Intercom · Zendesk · Front · Crisp also supported via webhook bridge.</p>
+    </div>
+    <div id="demo" class="rounded-2xl border border-white/10 bg-white/[.03] p-6">
+      <div class="text-xs uppercase tracking-wider text-white/50" data-i18n="demo.tag">Interactive demo</div>
+      <h3 class="text-2xl font-bold mt-1" data-i18n="demo.title">Try a translation — no signup.</h3>
+      <p class="text-white/65 text-sm mt-1" data-i18n="demo.desc">Type anything. We'll render it in the language your customer speaks.</p>
+      <div class="mt-5">
+        <label class="text-xs text-white/55" data-i18n="demo.label">Customer speaks</label>
+        <select id="tlang" class="w-full mt-1 bg-white/5 border border-white/15 rounded-lg px-3 py-2 text-sm">
+          <option value="ja">🇯🇵 Japanese</option><option value="ko">🇰🇷 Korean</option>
+          <option value="zh-CN">🇨🇳 Chinese (Simplified)</option><option value="zh-TW">🇹🇼 Chinese (Traditional)</option>
+          <option value="es">🇪🇸 Spanish</option><option value="fr">🇫🇷 French</option>
+          <option value="de">🇩🇪 German</option><option value="ar">🇸🇦 Arabic</option><option value="pt">🇧🇷 Portuguese</option>
+        </select>
+        <textarea id="src" rows="3" data-i18n-ph="demo.ph" placeholder="Your order shipped this morning — tracking is on the way!" class="w-full mt-3 bg-white/5 border border-white/15 rounded-lg px-3 py-2 text-sm"></textarea>
+        <button id="translate" class="btn btn-accent mt-3 w-full" data-i18n="demo.btn">Translate →</button>
+        <div id="out" class="mt-4 p-3 rounded-lg bg-white/5 border border-white/10 text-sm min-h-[3rem] text-white/80" data-i18n="demo.outph">Output will appear here…</div>
+        <p class="text-[11px] text-white/45 mt-2" data-i18n="demo.note">Demo uses a local dictionary — production Franklinn uses context-aware LLM translation tuned for customer service.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- AI COPILOT -->
+<section id="ai" class="max-w-6xl mx-auto px-5 py-24">
+  <div class="grid md:grid-cols-2 gap-12 items-center">
+    <div class="order-2 md:order-1 card p-5 md:p-6 relative">
+      <div class="flex items-center gap-2 pb-3 border-b border-black/5">
+        <svg width="28" height="28" viewBox="0 0 120 120" aria-hidden="true">
+          <path d="M14 30 Q14 22 22 22 L78 22 Q86 22 86 30 L86 58 Q86 66 78 66 L52 66 L40 78 L40 66 L22 66 Q14 66 14 58 Z" fill="#3B3B3E"/>
+          <path d="M34 50 Q34 42 42 42 L98 42 Q106 42 106 50 L106 78 Q106 86 98 86 L72 86 L60 98 L60 86 L42 86 Q34 86 34 78 Z" fill="#111114"/>
+          <path d="M52 62 L86 62 M52 74 L74 74" stroke="#FAFAF8" stroke-width="5" stroke-linecap="square" fill="none"/>
+        </svg>
+        <div class="text-sm font-semibold">Franklinn AI</div>
+        <span class="ml-auto chip text-[10px]"><span class="dot"></span> <span data-i18n="ai.ready">ready</span></span>
+      </div>
+      <div class="py-4 space-y-3 text-sm">
+        <div class="msg msg-out max-w-[85%]" data-i18n="ai.q1">Which language has the most complaints this week?</div>
+        <div class="msg msg-in max-w-[90%]"><span data-i18n="ai.a1">Spanish — 47 tickets (↑ 28% w/w). Top theme: late shipping to Mexico.</span><div class="tiny">📊 <span data-i18n="ai.a1c">tickets.language × sentiment · 7d</span></div></div>
+        <div class="msg msg-out max-w-[85%]" data-i18n="ai.q2">Show agents with slowest response time on Telegram.</div>
+        <div class="msg msg-in max-w-[90%]"><span data-i18n="ai.a2">3 agents over 8min median: Marco (11.4m), Yui (9.2m), Alex (8.7m).</span><div class="tiny">📊 <span data-i18n="ai.a2c">agents × median_reply_time · channel=telegram</span></div></div>
+        <div class="msg msg-out max-w-[85%]" data-i18n="ai.q3">Translate the top FAQ into Korean and save as a macro.</div>
+        <div class="msg msg-in max-w-[90%]"><span data-i18n="ai.a3">Done — "배송 지연 안내" saved to macros/ko. 14 agents now have access.</span><div class="tiny">✅ <span data-i18n="ai.a3c">macro created · team broadcast</span></div></div>
+      </div>
+      <div class="flex items-center gap-2 pt-3 border-t border-black/5">
+        <input disabled data-i18n-ph="ai.ph" placeholder="Ask Franklinn anything about your customer data…" class="flex-1 bg-paper rounded-lg px-3 py-2 text-sm border border-black/5"/>
+        <button class="btn btn-accent text-xs" data-i18n="ai.ask">Ask</button>
+      </div>
+    </div>
+    <div class="order-1 md:order-2">
+      <span class="chip">✨ <span data-i18n="ai.chip">AI Copilot</span></span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="ai.title">Ask your data anything. In any language.</h2>
+      <p class="mt-4 text-ink/70" data-i18n="ai.desc">Franklinn AI indexes every message, translation, and customer interaction. Ask in plain language — no SQL, no dashboards to build. Get answers, charts, and one-click actions.</p>
+      <ul class="mt-6 space-y-3 text-sm">
+        <li class="flex gap-3"><span class="text-accent font-bold">→</span><span data-i18n="ai.b1"><b>Natural language queries</b> — ask in your language, get answers in theirs.</span></li>
+        <li class="flex gap-3"><span class="text-accent font-bold">→</span><span data-i18n="ai.b2"><b>Charts on demand</b> — sentiment, volume, response time, CSAT by channel/language/agent.</span></li>
+        <li class="flex gap-3"><span class="text-accent font-bold">→</span><span data-i18n="ai.b3"><b>Actionable</b> — create macros, reassign tickets, send broadcasts, all from the same chat.</span></li>
+        <li class="flex gap-3"><span class="text-accent font-bold">→</span><span data-i18n="ai.b4"><b>Private by default</b> — your data is never used to train third-party models.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ACCOUNT SHIELD -->
+<section id="shield" class="bg-ink text-white">
+  <div class="max-w-6xl mx-auto px-5 py-24">
+    <div class="text-center max-w-2xl mx-auto">
+      <span class="chip bg-white/10 border-white/20 text-white">🛡️ <span data-i18n="shield.chip">Account Shield</span></span>
+      <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="shield.title">Your accounts don't get banned on our watch.</h2>
+      <p class="mt-4 text-white/70" data-i18n="shield.desc">Most mass translation tools trigger bot detection — messages too fast, too similar, too robotic. Franklinn is built from the ground up to look human to every platform.</p>
+    </div>
+    <div class="grid md:grid-cols-4 gap-4 mt-12">
+      <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-accent/20 text-accent grid place-items-center mb-3">⚡</div><h3 class="font-bold" data-i18n="shield.p1t">Human-paced delivery</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p1d">Adaptive delays and typing indicators match each platform's organic patterns — no burst sends, no suspicious uniformity.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-accent2/20 text-accent2 grid place-items-center mb-3">🌐</div><h3 class="font-bold" data-i18n="shield.p2t">Residential IP routing</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p2d">Each Seat is pinned to a clean residential IP in your region. No datacenter fingerprints, no geo-anomalies.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-amber/20 text-amber grid place-items-center mb-3">🎭</div><h3 class="font-bold" data-i18n="shield.p3t">Style randomization</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p3d">Subtle rephrasing and emoji variance prevent repetition signatures that platforms flag as spam.</p></div>
+      <div class="rounded-2xl border border-white/10 bg-white/[.03] p-6"><div class="w-9 h-9 rounded-lg bg-white/10 text-white grid place-items-center mb-3">👁️</div><h3 class="font-bold" data-i18n="shield.p4t">Risk radar</h3><p class="text-sm text-white/60 mt-2" data-i18n="shield.p4d">Live health score per account, warnings before limits trigger, and auto-throttle if a channel looks stressed.</p></div>
+    </div>
+    <div class="mt-10 grid grid-cols-3 gap-4 max-w-3xl mx-auto text-center">
+      <div><div class="text-3xl font-extrabold text-accent2">99.6%</div><div class="text-xs text-white/55 mt-1" data-i18n="shield.s1">account uptime (last 12mo)</div></div>
+      <div><div class="text-3xl font-extrabold text-accent2">0</div><div class="text-xs text-white/55 mt-1" data-i18n="shield.s2">permanent bans on Growth+ tier</div></div>
+      <div><div class="text-3xl font-extrabold text-accent2">&lt;2min</div><div class="text-xs text-white/55 mt-1" data-i18n="shield.s3">median risk-alert response</div></div>
+    </div>
+  </div>
+</section>
+
+
+<!-- PRICING -->
+<section id="pricing" class="max-w-6xl mx-auto px-5 py-24">
+  <div class="text-center mb-12">
+    <span class="chip" data-i18n="price.chip">Pricing</span>
+    <h2 class="mt-3 text-3xl md:text-4xl font-extrabold tracking-tight" data-i18n="price.title">Simple pricing. Pay how you want.</h2>
+    <p class="mt-3 text-ink/60 max-w-xl mx-auto" data-i18n="price.desc">Start free, upgrade when you need your own channels. Credit card or USDT — your choice.</p>
+  </div>
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="card p-6 flex flex-col">
+      <div class="text-sm font-semibold text-ink/60">Free</div>
+      <div class="mt-2 text-3xl font-extrabold">$0</div>
+      <div class="text-xs text-ink/55" data-i18n="price.free.sub">No signup required</div>
+      <ul class="mt-5 space-y-2 text-sm text-ink/70 flex-1">
+        <li data-i18n="price.free.f1">✓ 1 sandbox Seat</li>
+        <li data-i18n="price.free.f2">✓ 100 translations / day</li>
+        <li data-i18n="price.free.f3">✓ 50+ languages</li>
+        <li class="text-ink/45" data-i18n="price.free.f4">· Watermark & 24h data reset</li>
+      </ul>
+      <a href="#demo" class="btn btn-ghost mt-5" data-i18n="price.free.cta">Try now</a>
+    </div>
+    <div class="card p-6 flex flex-col">
+      <div class="text-sm font-semibold text-ink/60">Starter</div>
+      <div class="mt-2 text-3xl font-extrabold">$29<span class="text-sm text-ink/55 font-medium">/mo</span></div>
+      <div class="text-xs text-ink/55" data-i18n="price.starter.sub">Solo / trial</div>
+      <ul class="mt-5 space-y-2 text-sm text-ink/70 flex-1">
+        <li data-i18n="price.starter.f1">✓ 3 Seats</li>
+        <li data-i18n="price.starter.f2">✓ 10,000 translations / mo</li>
+        <li data-i18n="price.starter.f3">✓ Connect real accounts</li>
+        <li data-i18n="price.starter.f4">✓ Account Shield (basic)</li>
+        <li data-i18n="price.starter.f5">✓ AI Copilot (100 queries)</li>
+      </ul>
+      <a href="#signup" data-plan="starter" class="btn btn-ghost mt-5" data-i18n="price.choose">Choose plan</a>
+    </div>
+    <div class="card p-6 flex flex-col relative ring-2 ring-accent">
+      <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-[11px] font-bold px-2 py-1 rounded-full" data-i18n="price.popular">MOST POPULAR</div>
+      <div class="text-sm font-semibold text-accent">Growth</div>
+      <div class="mt-2 text-3xl font-extrabold">$99<span class="text-sm text-ink/55 font-medium">/mo</span></div>
+      <div class="text-xs text-ink/55" data-i18n="price.growth.sub">Small CS teams</div>
+      <ul class="mt-5 space-y-2 text-sm text-ink/70 flex-1">
+        <li data-i18n="price.growth.f1">✓ 10 Seats ($8/extra)</li>
+        <li data-i18n="price.growth.f2">✓ Unlimited translations</li>
+        <li data-i18n="price.growth.f3">✓ Account Shield Pro</li>
+        <li data-i18n="price.growth.f4">✓ AI Copilot (unlimited)</li>
+        <li data-i18n="price.growth.f5">✓ Priority support</li>
+      </ul>
+      <a href="#signup" data-plan="growth" class="btn btn-accent mt-5" data-i18n="price.choose">Choose plan</a>
+    </div>
+    <div class="card p-6 flex flex-col">
+      <div class="text-sm font-semibold text-ink/60">Scale</div>
+      <div class="mt-2 text-3xl font-extrabold">$299<span class="text-sm text-ink/55 font-medium">/mo</span></div>
+      <div class="text-xs text-ink/55" data-i18n="price.scale.sub">Cross-border ops</div>
+      <ul class="mt-5 space-y-2 text-sm text-ink/70 flex-1">
+        <li data-i18n="price.scale.f1">✓ 50 Seats ($5/extra)</li>
+        <li data-i18n="price.scale.f2">✓ Unlimited everything</li>
+        <li data-i18n="price.scale.f3">✓ SSO + audit log</li>
+        <li data-i18n="price.scale.f4">✓ Dedicated Risk Radar + SLA</li>
+        <li data-i18n="price.scale.f5">✓ Slack channel support</li>
+      </ul>
+      <a href="#signup" data-plan="scale" class="btn btn-ghost mt-5" data-i18n="price.choose">Choose plan</a>
+    </div>
+  </div>
+
+  <div class="mt-10 card p-6 md:p-8">
+    <div class="flex flex-wrap items-center justify-between gap-4">
+      <div>
+        <div class="text-sm font-semibold text-ink/60 uppercase tracking-wider" data-i18n="pay.tag">Payment methods</div>
+        <h3 class="text-xl font-bold mt-1" data-i18n="pay.title">Credit card, crypto, or pay-as-you-go.</h3>
+      </div>
+      <div class="flex gap-1 bg-paper p-1 rounded-xl border border-black/5">
+        <button data-tab="card" class="tab-btn tab-active px-4 py-2 rounded-lg text-sm font-semibold" data-i18n="pay.tab1">💳 Card</button>
+        <button data-tab="crypto" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/60" data-i18n="pay.tab2">🪙 USDT</button>
+        <button data-tab="payg" class="tab-btn px-4 py-2 rounded-lg text-sm font-semibold text-ink/60" data-i18n="pay.tab3">💧 PAYG</button>
+      </div>
+    </div>
+    <div id="pay-card" class="tab-panel mt-6 grid sm:grid-cols-3 gap-4">
+      <div><div class="font-semibold" data-i18n="pay.card.t1">Major cards accepted</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.card.d1">Visa, Mastercard, AmEx. 3D Secure. Powered by Stripe.</div></div>
+      <div><div class="font-semibold" data-i18n="pay.card.t2">Monthly auto-billing</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.card.d2">Invoices in USD/EUR/JPY. Auto-convert at spot rate.</div></div>
+      <div><div class="font-semibold" data-i18n="pay.card.t3">Instant upgrade</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.card.d3">Add Seats or switch tiers mid-cycle; we prorate automatically.</div></div>
+      <div class="sm:col-span-3 flex flex-wrap gap-2 pt-2"><span class="chip">Visa</span><span class="chip">Mastercard</span><span class="chip">AmEx</span><span class="chip">Apple Pay</span><span class="chip">Google Pay</span></div>
+    </div>
+    <div id="pay-crypto" class="tab-panel hidden mt-6 grid sm:grid-cols-3 gap-4">
+      <div><div class="font-semibold" data-i18n="pay.cr.t1">4 chains, all USDT</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.cr.d1">Ethereum · BNB Chain · Polygon · Tron. Pick whatever's cheapest.</div></div>
+      <div><div class="font-semibold" data-i18n="pay.cr.t2">Seconds, not days</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.cr.d2">Credits land after 1 confirmation (Tron ~3s, ETH ~30s).</div></div>
+      <div><div class="font-semibold" data-i18n="pay.cr.t3">No KYC under $1k/mo</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.cr.d3">One-click deposit address via Fireblocks. Need fiat? We route through MoonPay.</div></div>
+      <div class="sm:col-span-3 flex flex-wrap gap-2 pt-2"><span class="chip">ETH</span><span class="chip">BSC</span><span class="chip">Polygon</span><span class="chip">Tron</span><span class="chip">USDT</span></div>
+    </div>
+    <div id="pay-payg" class="tab-panel hidden mt-6 grid sm:grid-cols-3 gap-4">
+      <div><div class="font-semibold" data-i18n="pay.pg.t1">Top up from $20</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.pg.d1">No subscription. Balance never expires.</div></div>
+      <div><div class="font-semibold" data-i18n="pay.pg.t2">$0.004 per translation</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.pg.d2">~250 messages per $1. Seats billed $0.30/day while active.</div></div>
+      <div><div class="font-semibold" data-i18n="pay.pg.t3">Burst-friendly</div><div class="text-sm text-ink/60 mt-1" data-i18n="pay.pg.d3">Perfect for seasonal campaigns, product launches, and one-off support pushes.</div></div>
+    </div>
+  </div>
+  <p class="text-center text-xs text-ink/50 mt-6" data-i18n="price.annual">Annual billing saves 20% on Starter / Growth / Scale.</p>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="max-w-3xl mx-auto px-5 py-20">
+  <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight text-center" data-i18n="faq.title">Questions people actually ask.</h2>
+  <div class="mt-10 space-y-3">
+    <details class="card p-5" open>
+      <summary class="flex items-center justify-between font-semibold"><span data-i18n="faq.q1">How do you keep my accounts from getting banned?</span><span class="chev transition-transform">⌄</span></summary>
+      <p class="mt-3 text-ink/70 text-sm" data-i18n="faq.a1">Account Shield: human-paced sends, residential IPs per Seat, style randomization, and a live risk radar that throttles before a platform flags you. On Growth+ we have zero permanent bans to date.</p>
+    </details>
+    <details class="card p-5">
+      <summary class="flex items-center justify-between font-semibold"><span data-i18n="faq.q2">Is the Free tier really forever?</span><span class="chev transition-transform">⌄</span></summary>
+      <p class="mt-3 text-ink/70 text-sm" data-i18n="faq.a2">Yes. 100 translations/day on a shared sandbox, no trial clock. Pay only when you connect a real account or outgrow the limit.</p>
+    </details>
+    <details class="card p-5">
+      <summary class="flex items-center justify-between font-semibold"><span data-i18n="faq.q3">How accurate is the translation?</span><span class="chev transition-transform">⌄</span></summary>
+      <p class="mt-3 text-ink/70 text-sm" data-i18n="faq.a3">Customer-service-tuned LLM stack with per-account memory. It learns your product names, tone, and common phrasings within the first ~50 messages.</p>
+    </details>
+    <details class="card p-5">
+      <summary class="flex items-center justify-between font-semibold"><span data-i18n="faq.q4">Card or crypto — which should I pick?</span><span class="chev transition-transform">⌄</span></summary>
+      <p class="mt-3 text-ink/70 text-sm" data-i18n="faq.a4">Card = smoothest onboarding, auto-billing, standard invoices. USDT = cross-border friendly, no FX loss, no chargebacks, no KYC under $1k/mo. You can switch any time.</p>
+    </details>
+    <details class="card p-5">
+      <summary class="flex items-center justify-between font-semibold"><span data-i18n="faq.q5">Where is my data stored?</span><span class="chev transition-transform">⌄</span></summary>
+      <p class="mt-3 text-ink/70 text-sm" data-i18n="faq.a5">EU (Frankfurt) by default, with Singapore and US-East on Scale. Encrypted at rest. Never used to train third-party models.</p>
+    </details>
+  </div>
+</section>
+
+<!-- CTA -->
+<section id="signup" class="max-w-5xl mx-auto px-5 py-20">
+  <div class="card p-10 md:p-14 text-center bg-ink text-white border-0 relative overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-80 h-80 bg-accent blur-3xl opacity-40 rounded-full"></div>
+    <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-accent2 blur-3xl opacity-30 rounded-full"></div>
+    <div class="relative">
+      <h2 class="text-3xl md:text-5xl font-extrabold tracking-tight" data-i18n="cta.title">Stop losing customers to language.</h2>
+      <p class="mt-4 text-white/70 max-w-xl mx-auto" data-i18n="cta.desc">100 free translations a day, no signup. Upgrade when you're ready — card or USDT, one click either way.</p>
+      <form id="signup-form" class="mt-8 flex flex-col sm:flex-row gap-2 max-w-md mx-auto" onsubmit="event.preventDefault();handleSignup();">
+        <input id="email" type="email" required data-i18n-ph="cta.ph" placeholder="you@company.com" class="flex-1 bg-white/10 border border-white/20 rounded-lg px-4 py-3 text-sm placeholder-white/40 focus:outline-none focus:border-white/50" />
+        <button class="btn btn-accent" data-i18n="cta.btn">Create account</button>
+      </form>
+      <div id="signup-msg" class="text-white/65 text-sm mt-3 min-h-[1.2rem]"></div>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-5 text-xs text-white/50">
+        <span data-i18n="cta.b1">No card required</span>·<span data-i18n="cta.b2">Cancel anytime</span>·<span data-i18n="cta.b3">GDPR + SOC2 (in progress)</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="border-t border-black/5">
+  <div class="max-w-6xl mx-auto px-5 py-10 flex flex-wrap gap-6 items-center justify-between text-sm text-ink/60">
+    <div class="flex items-center gap-2 font-bold text-ink">
+      <svg width="24" height="24" viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M14 30 Q14 22 22 22 L78 22 Q86 22 86 30 L86 58 Q86 66 78 66 L52 66 L40 78 L40 66 L22 66 Q14 66 14 58 Z" fill="#3B3B3E"/>
+        <path d="M34 50 Q34 42 42 42 L98 42 Q106 42 106 50 L106 78 Q106 86 98 86 L72 86 L60 98 L60 86 L42 86 Q34 86 34 78 Z" fill="#111114"/>
+        <path d="M52 62 L86 62 M52 74 L74 74" stroke="#FAFAF8" stroke-width="5" stroke-linecap="square" fill="none"/>
+      </svg>
+      Franklinn
+    </div>
+    <div class="flex flex-wrap gap-5">
+      <a href="#how" class="hover:text-ink" data-i18n="nav.how">How it works</a>
+      <a href="#ai" class="hover:text-ink" data-i18n="nav.ai">AI Copilot</a>
+      <a href="#shield" class="hover:text-ink" data-i18n="nav.shield">Account Shield</a>
+      <a href="#pricing" class="hover:text-ink" data-i18n="nav.pricing">Pricing</a>
+      <a href="https://app.franklinn.com/login" class="hover:text-ink" data-i18n="nav.login">Log in</a>
+      <a href="terms.html" class="hover:text-ink" data-i18n="nav.terms">Terms</a>
+      <a href="privacy.html" class="hover:text-ink" data-i18n="nav.privacy">Privacy</a>
+      <a href="mailto:hello@franklinn.com" class="hover:text-ink">hello@franklinn.com</a>
+    </div>
+    <div class="text-xs text-ink/40" data-i18n="footer.legal">© 2026 Franklinn · franklinn.com · Made for cross-border teams</div>
+  </div>
+</footer>
+
+<script>
+// ===== i18n dictionary =====
+const I18N = {
+  "en": {
+  "nav.how": "How it works",
+  "nav.ai": "AI Copilot",
+  "nav.shield": "Account Shield",
+  "nav.pricing": "Pricing",
+  "nav.login": "Log in",
+  "nav.faq": "FAQ",
+  "nav.demo": "Try demo",
+  "nav.signup": "Get started",
+  "hero.chip": "Live translation · 50+ languages · Account-safe",
+  "hero.t1": "Talk to every customer in",
+  "hero.h": "their language.",
+  "hero.desc": "Franklinn drops real-time AI translation into Telegram, WhatsApp, Discord and Instagram DMs — your team types in one language, customers see native. No app switch, no latency, no account bans.",
+  "hero.cta1": "Try it free, no signup →",
+  "hero.cta2": "See pricing",
+  "hero.b1": "✓ 100 free translations / day",
+  "hero.b2": "✓ Pay with card or USDT",
+  "hero.b3": "✓ Account-ban protection built in",
+  "chat.name": "Keiko · Tokyo",
+  "chat.meta": "Telegram · typing in 日本語",
+  "chat.live": "live",
+  "chat.m1tr": "Hi, when will yesterday's order arrive?",
+  "chat.m2": "Hey Keiko — it shipped this morning, ETA Friday. Tracking link coming up.",
+  "chat.m3tr": "Thank you! 😊",
+  "chat.ph": "Type in your language — send in theirs",
+  "chat.send": "Send",
+  "how.chip": "How it works",
+  "how.title": "From zero to bilingual in 3 minutes.",
+  "how.skip": "Skip to live demo →",
+  "how.s1t": "Connect a channel",
+  "how.s1d": "Plug in Telegram, WhatsApp Business, Discord or Instagram. One-click OAuth, no backend work.",
+  "how.s2t": "Your team types natively",
+  "how.s2d": "Messages auto-translate to each customer's language with context memory — names, slang, product terms stay consistent.",
+  "how.s3t": "Customers feel at home",
+  "how.s3d": "They see native, you see your language. Tone-adjusted, under 400ms. No translator-bot awkwardness.",
+  "ch.chip": "Channels",
+  "ch.title": "Works where your customers already are.",
+  "ch.desc": "One Seat = one connected account. Mix and match — a small team on Growth can cover 10 channels across regions.",
+  "demo.tag": "Interactive demo",
+  "demo.title": "Try a translation — no signup.",
+  "demo.desc": "Type anything. We'll render it in the language your customer speaks.",
+  "demo.label": "Customer speaks",
+  "demo.ph": "Your order shipped this morning — tracking is on the way!",
+  "demo.btn": "Translate →",
+  "demo.outph": "Output will appear here…",
+  "demo.note": "Demo uses a local dictionary — production Franklinn uses context-aware LLM translation tuned for customer service.",
+  "ai.chip": "AI Copilot",
+  "ai.ready": "ready",
+  "ai.ask": "Ask",
+  "ai.ph": "Ask Franklinn anything about your customer data…",
+  "ai.title": "Ask your data anything. In any language.",
+  "ai.desc": "Franklinn AI indexes every message, translation, and customer interaction. Ask in plain language — no SQL, no dashboards to build. Get answers, charts, and one-click actions.",
+  "ai.q1": "Which language has the most complaints this week?",
+  "ai.a1": "Spanish — 47 tickets (↑ 28% w/w). Top theme: late shipping to Mexico.",
+  "ai.a1c": "tickets.language × sentiment · 7d",
+  "ai.q2": "Show agents with slowest response time on Telegram.",
+  "ai.a2": "3 agents over 8min median: Marco (11.4m), Yui (9.2m), Alex (8.7m).",
+  "ai.a2c": "agents × median_reply_time · channel=telegram",
+  "ai.q3": "Translate the top FAQ into Korean and save as a macro.",
+  "ai.a3": "Done — \\\"배송 지연 안내\\\" saved to macros/ko. 14 agents now have access.",
+  "ai.a3c": "macro created · team broadcast",
+  "ai.b1": "<b>Natural language queries</b> — ask in your language, get answers in theirs.",
+  "ai.b2": "<b>Charts on demand</b> — sentiment, volume, response time, CSAT by channel/language/agent.",
+  "ai.b3": "<b>Actionable</b> — create macros, reassign tickets, send broadcasts, all from the same chat.",
+  "ai.b4": "<b>Private by default</b> — your data is never used to train third-party models.",
+  "shield.chip": "Account Shield",
+  "shield.title": "Your accounts don't get banned on our watch.",
+  "shield.desc": "Most mass translation tools trigger bot detection — messages too fast, too similar, too robotic. Franklinn is built from the ground up to look human to every platform.",
+  "shield.p1t": "Human-paced delivery",
+  "shield.p1d": "Adaptive delays and typing indicators match each platform's organic patterns — no burst sends, no suspicious uniformity.",
+  "shield.p2t": "Residential IP routing",
+  "shield.p2d": "Each Seat is pinned to a clean residential IP in your region. No datacenter fingerprints, no geo-anomalies.",
+  "shield.p3t": "Style randomization",
+  "shield.p3d": "Subtle rephrasing and emoji variance prevent repetition signatures that platforms flag as spam.",
+  "shield.p4t": "Risk radar",
+  "shield.p4d": "Live health score per account, warnings before limits trigger, and auto-throttle if a channel looks stressed.",
+  "shield.s1": "account uptime (last 12mo)",
+  "shield.s2": "permanent bans on Growth+ tier",
+  "shield.s3": "median risk-alert response",
+  "price.chip": "Pricing",
+  "price.title": "Simple pricing. Pay how you want.",
+  "price.desc": "Start free, upgrade when you need your own channels. Credit card or USDT — your choice.",
+  "price.free.sub": "No signup required",
+  "price.free.f1": "✓ 1 sandbox Seat",
+  "price.free.f2": "✓ 100 translations / day",
+  "price.free.f3": "✓ 50+ languages",
+  "price.free.f4": "· Watermark & 24h data reset",
+  "price.free.cta": "Try now",
+  "price.starter.sub": "Solo / trial",
+  "price.starter.f1": "✓ 3 Seats",
+  "price.starter.f2": "✓ 10,000 translations / mo",
+  "price.starter.f3": "✓ Connect real accounts",
+  "price.starter.f4": "✓ Account Shield (basic)",
+  "price.starter.f5": "✓ AI Copilot (100 queries)",
+  "price.popular": "MOST POPULAR",
+  "price.growth.sub": "Small CS teams",
+  "price.growth.f1": "✓ 10 Seats ($8/extra)",
+  "price.growth.f2": "✓ Unlimited translations",
+  "price.growth.f3": "✓ Account Shield Pro",
+  "price.growth.f4": "✓ AI Copilot (unlimited)",
+  "price.growth.f5": "✓ Priority support",
+  "price.scale.sub": "Cross-border ops",
+  "price.scale.f1": "✓ 50 Seats ($5/extra)",
+  "price.scale.f2": "✓ Unlimited everything",
+  "price.scale.f3": "✓ SSO + audit log",
+  "price.scale.f4": "✓ Dedicated Risk Radar + SLA",
+  "price.scale.f5": "✓ Slack channel support",
+  "price.choose": "Choose plan",
+  "price.annual": "Annual billing saves 20% on Starter / Growth / Scale.",
+  "pay.tag": "Payment methods",
+  "pay.title": "Credit card, crypto, or pay-as-you-go.",
+  "pay.tab1": "💳 Card",
+  "pay.tab2": "🪙 USDT",
+  "pay.tab3": "💧 PAYG",
+  "pay.card.t1": "Major cards accepted",
+  "pay.card.d1": "Visa, Mastercard, AmEx. 3D Secure. Powered by Stripe.",
+  "pay.card.t2": "Monthly auto-billing",
+  "pay.card.d2": "Invoices in USD/EUR/JPY. Auto-convert at spot rate.",
+  "pay.card.t3": "Instant upgrade",
+  "pay.card.d3": "Add Seats or switch tiers mid-cycle; we prorate automatically.",
+  "pay.cr.t1": "4 chains, all USDT",
+  "pay.cr.d1": "Ethereum · BNB Chain · Polygon · Tron. Pick whatever's cheapest.",
+  "pay.cr.t2": "Seconds, not days",
+  "pay.cr.d2": "Credits land after 1 confirmation (Tron ~3s, ETH ~30s).",
+  "pay.cr.t3": "No KYC under $1k/mo",
+  "pay.cr.d3": "One-click deposit address via Fireblocks. Need fiat? We route through MoonPay.",
+  "pay.pg.t1": "Top up from $20",
+  "pay.pg.d1": "No subscription. Balance never expires.",
+  "pay.pg.t2": "$0.004 per translation",
+  "pay.pg.d2": "~250 messages per $1. Seats billed $0.30/day while active.",
+  "pay.pg.t3": "Burst-friendly",
+  "pay.pg.d3": "Perfect for seasonal campaigns, product launches, and one-off support pushes.",
+  "faq.title": "Questions people actually ask.",
+  "faq.q1": "How do you keep my accounts from getting banned?",
+  "faq.a1": "Account Shield: human-paced sends, residential IPs per Seat, style randomization, and a live risk radar that throttles before a platform flags you. On Growth+ we have zero permanent bans to date.",
+  "faq.q2": "Is the Free tier really forever?",
+  "faq.a2": "Yes. 100 translations/day on a shared sandbox, no trial clock. Pay only when you connect a real account or outgrow the limit.",
+  "faq.q3": "How accurate is the translation?",
+  "faq.a3": "Customer-service-tuned LLM stack with per-account memory. It learns your product names, tone, and common phrasings within the first ~50 messages.",
+  "faq.q4": "Card or crypto — which should I pick?",
+  "faq.a4": "Card = smoothest onboarding, auto-billing, standard invoices. USDT = cross-border friendly, no FX loss, no chargebacks, no KYC under $1k/mo. You can switch any time.",
+  "faq.q5": "Where is my data stored?",
+  "faq.a5": "EU (Frankfurt) by default, with Singapore and US-East on Scale. Encrypted at rest. Never used to train third-party models.",
+  "cta.title": "Stop losing customers to language.",
+  "cta.desc": "100 free translations a day, no signup. Upgrade when you're ready — card or USDT, one click either way.",
+  "cta.ph": "you@company.com",
+  "cta.btn": "Create account",
+  "cta.b1": "No card required",
+  "cta.b2": "Cancel anytime",
+  "cta.b3": "GDPR + SOC2 (in progress)",
+  "footer.legal": "© 2026 Franklinn · franklinn.com · Made for cross-border teams",
+  "signup.ok": "Thanks — we'll email {email} a magic link. (Demo site: no email actually sent.)",
+  "signup.plan": "Selected plan: {plan}. Enter your email to continue.",
+  "nav.terms": "Terms",
+  "nav.privacy": "Privacy",
+  "ch.note": "Intercom · Zendesk · Front · Crisp also supported via webhook bridge."
+},
+  "zh-CN": {
+  "nav.how": "工作原理",
+  "nav.ai": "AI 智能助手",
+  "nav.shield": "账号防护",
+  "nav.pricing": "定价",
+  "nav.login": "登录",
+  "nav.faq": "常见问题",
+  "nav.demo": "试用演示",
+  "nav.signup": "立即开始",
+  "hero.chip": "实时翻译 · 50+ 语言 · 账号安全",
+  "hero.t1": "用每位客户的",
+  "hero.h": "母语与他们沟通。",
+  "hero.desc": "Franklinn 将实时 AI 翻译无缝嵌入 Telegram、WhatsApp、Discord 和 Instagram 私信——你的团队用一种语言输入，客户看到的是地道母语。无需切换应用，零延迟，不封号。",
+  "hero.cta1": "免费试用，无需注册 →",
+  "hero.cta2": "查看定价",
+  "hero.b1": "✓ 每天 100 条免费翻译",
+  "hero.b2": "✓ 支持银行卡或 USDT 付款",
+  "hero.b3": "✓ 内置账号封禁防护",
+  "chat.name": "Keiko · 东京",
+  "chat.meta": "Telegram · 正在用 日本語 输入",
+  "chat.live": "实时",
+  "chat.m1tr": "你好，昨天下的订单什么时候到？",
+  "chat.m2": "嘿 Keiko——今早已发货，预计周五到。物流链接马上发给你。",
+  "chat.m3tr": "谢谢！😊",
+  "chat.ph": "用你的语言输入——以客户的语言发送",
+  "chat.send": "发送",
+  "how.chip": "工作原理",
+  "how.title": "3 分钟，玩转双语客服。",
+  "how.skip": "直接看在线演示 →",
+  "how.s1t": "接入渠道",
+  "how.s1d": "一键接入 Telegram、WhatsApp Business、Discord 或 Instagram，OAuth 授权，无需任何后端开发。",
+  "how.s2t": "团队用母语输入",
+  "how.s2d": "消息自动翻译成每位客户的语言，并保留上下文记忆——姓名、俚语、产品术语始终一致。",
+  "how.s3t": "客户感受如鱼得水",
+  "how.s3d": "客户看到地道母语，你看到自己的语言。语气自然调整，响应低于 400ms，告别机器翻译的违和感。",
+  "ch.chip": "支持渠道",
+  "ch.title": "覆盖客户已在使用的所有平台。",
+  "ch.desc": "一个 Seat 对应一个关联账号，可自由组合——Growth 套餐的小团队最多可跨地区管理 10 个渠道。",
+  "demo.tag": "互动演示",
+  "demo.title": "无需注册，立即体验翻译效果。",
+  "demo.desc": "随便输入一段话，我们实时呈现客户所用语言的翻译结果。",
+  "demo.label": "客户使用的语言",
+  "demo.ph": "您的订单今早已发货——物流单号即将送达！",
+  "demo.btn": "翻译 →",
+  "demo.outph": "翻译结果将显示在这里……",
+  "demo.note": "演示版使用本地词典；正式版 Franklinn 采用针对客户服务场景精调的上下文感知 LLM 翻译引擎。",
+  "ai.chip": "AI 智能助手",
+  "ai.ready": "就绪",
+  "ai.ask": "提问",
+  "ai.ph": "向 Franklinn 询问任何客户数据问题……",
+  "ai.title": "用任意语言，随时查询你的数据。",
+  "ai.desc": "Franklinn AI 索引每一条消息、翻译记录和客户互动。用自然语言提问，无需 SQL，无需搭建看板，即可获取答案、图表和一键执行的操作。",
+  "ai.q1": "本周哪种语言的投诉最多？",
+  "ai.a1": "西班牙语——47 个工单（↑ 28% w/w）。主要问题：发往墨西哥的订单延迟。",
+  "ai.a1c": "tickets.language × sentiment · 7d",
+  "ai.q2": "显示 Telegram 上响应时间最慢的客服。",
+  "ai.a2": "3 名客服中位响应超过 8 分钟：Marco（11.4m）、Yui（9.2m）、Alex（8.7m）。",
+  "ai.a2c": "agents × median_reply_time · channel=telegram",
+  "ai.q3": "将最热门的 FAQ 翻译成韩语并保存为快捷回复。",
+  "ai.a3": "已完成——\\\"배송 지연 안내\\\" 已保存至 macros/ko，14 名客服即可使用。",
+  "ai.a3c": "macro created · team broadcast",
+  "ai.b1": "<b>自然语言查询</b>——用你的语言提问，以客户的语言获取答案。",
+  "ai.b2": "<b>按需生成图表</b>——情绪分析、消息量、响应时间、CSAT，按渠道/语言/客服多维度呈现。",
+  "ai.b3": "<b>即查即行动</b>——创建快捷回复、重新分配工单、发送群发消息，全在同一个对话框完成。",
+  "ai.b4": "<b>默认数据私密</b>——你的数据绝不用于训练任何第三方模型。",
+  "shield.chip": "账号防护",
+  "shield.title": "在我们的守护下，你的账号不会被封。",
+  "shield.desc": "大多数批量翻译工具会触发平台的机器人检测——发送太快、内容太相似、语气太机械。Franklinn 从底层架构就被设计成对每个平台都像真人操作。",
+  "shield.p1t": "模拟真人发送节奏",
+  "shield.p1d": "自适应延迟与正在输入提示符完全匹配各平台的自然行为模式，无爆发式发送，无可疑的高度一致性。",
+  "shield.p2t": "住宅 IP 路由",
+  "shield.p2d": "每个 Seat 绑定你所在地区的干净住宅 IP，无数据中心指纹，无地理位置异常。",
+  "shield.p3t": "风格随机化",
+  "shield.p3d": "微妙的措辞变换与 emoji 差异化，有效避免被平台识别为垃圾信息的重复特征。",
+  "shield.p4t": "风险雷达",
+  "shield.p4d": "每个账号实时健康评分，在触发限制前提前预警，并在渠道压力过大时自动降速。",
+  "shield.s1": "账号正常运行率（过去 12 个月）",
+  "shield.s2": "Growth+ 套餐永久封号次数",
+  "shield.s3": "风险预警中位响应时间",
+  "price.chip": "定价",
+  "price.title": "透明定价，随心支付。",
+  "price.desc": "免费起步，需要接入自有渠道时再升级。银行卡或 USDT，由你决定。",
+  "price.free.sub": "无需注册",
+  "price.free.f1": "✓ 1 个沙盒 Seat",
+  "price.free.f2": "✓ 每天 100 条翻译",
+  "price.free.f3": "✓ 50+ 语言",
+  "price.free.f4": "· 带水印 & 数据 24 小时重置",
+  "price.free.cta": "立即试用",
+  "price.starter.sub": "个人 / 试用",
+  "price.starter.f1": "✓ 3 个坐席",
+  "price.starter.f2": "✓ 每月 10,000 条翻译",
+  "price.starter.f3": "✓ 接入真实账号",
+  "price.starter.f4": "✓ Account Shield（基础版）",
+  "price.starter.f5": "✓ AI Copilot（100 queries）",
+  "price.popular": "最受欢迎",
+  "price.growth.sub": "小型客服团队",
+  "price.growth.f1": "✓ 10 个坐席（$8/extra）",
+  "price.growth.f2": "✓ 无限次翻译",
+  "price.growth.f3": "✓ Account Shield Pro",
+  "price.growth.f4": "✓ AI Copilot（无限次）",
+  "price.growth.f5": "✓ 优先支持",
+  "price.scale.sub": "跨境业务团队",
+  "price.scale.f1": "✓ 50 个坐席（$5/extra）",
+  "price.scale.f2": "✓ 全项目无限使用",
+  "price.scale.f3": "✓ SSO + 操作审计日志",
+  "price.scale.f4": "✓ 专属 Risk Radar + SLA 保障",
+  "price.scale.f5": "✓ Slack 频道专属支持",
+  "price.choose": "选择套餐",
+  "price.annual": "按年计费，Starter / Growth / Scale 均可节省 20%。",
+  "pay.tag": "支付方式",
+  "pay.title": "银行卡、加密货币或按量付费，随你选。",
+  "pay.tab1": "💳 银行卡",
+  "pay.tab2": "🪙 USDT",
+  "pay.tab3": "💧 PAYG",
+  "pay.card.t1": "支持主流银行卡",
+  "pay.card.d1": "Visa、Mastercard、AmEx，支持 3D Secure 验证，由 Stripe 提供支持。",
+  "pay.card.t2": "每月自动扣款",
+  "pay.card.d2": "支持 USD/EUR/JPY 开票，按实时汇率自动换算。",
+  "pay.card.t3": "即时升级",
+  "pay.card.d3": "周期中途增加坐席或切换套餐，系统自动按比例计费。",
+  "pay.cr.t1": "4 条链，全部支持 USDT",
+  "pay.cr.d1": "Ethereum · BNB Chain · Polygon · Tron，选手续费最低的那条。",
+  "pay.cr.t2": "秒级到账，无需等天",
+  "pay.cr.d2": "1 次确认后即到账（Tron 约 3s，ETH 约 30s）。",
+  "pay.cr.t3": "$1k/mo 以下免 KYC",
+  "pay.cr.d3": "通过 Fireblocks 一键获取充值地址。需要法币？我们通过 MoonPay 为你打通通道。",
+  "pay.pg.t1": "最低 $20 起充",
+  "pay.pg.d1": "无需订阅，余额永不过期。",
+  "pay.pg.t2": "每条翻译 $0.004",
+  "pay.pg.d2": "每 $1 约可发送 250 条消息，活跃坐席每日计费 $0.30。",
+  "pay.pg.t3": "突发流量无压力",
+  "pay.pg.d3": "非常适合季节性营销活动、新品上线及临时客服高峰期。",
+  "faq.title": "大家最常问的问题。",
+  "faq.q1": "你们如何防止我的账号被封？",
+  "faq.a1": "Account Shield 全程守护：模拟真人发送节奏、每个 Seat 独立住宅 IP、风格随机化，以及在平台标记之前主动降速的实时风险雷达。Growth+ 套餐至今零永久封号记录。",
+  "faq.q2": "免费套餐真的永久有效吗？",
+  "faq.a2": "是的。共享沙盒环境每天 100 条翻译，无试用倒计时。只有在接入真实账号或超出限额时才需要付费。",
+  "faq.q3": "翻译准确度如何？",
+  "faq.a3": "采用针对客服场景精调的 LLM 组合，并具备账号级记忆能力，约 50 条消息后即可学会你的产品名称、语气风格和常用表达。",
+  "faq.q4": "银行卡还是加密货币，该怎么选？",
+  "faq.a4": "银行卡 = 开通最顺畅，自动扣款，标准发票。USDT = 跨境友好，无汇损，无拒付风险，$1k/mo 以下免 KYC。随时可切换。",
+  "faq.q5": "我的数据存储在哪里？",
+  "faq.a5": "默认存储于欧盟（法兰克福），Scale 套餐可选新加坡或美国东部节点。静态加密存储，绝不用于训练第三方模型。",
+  "cta.title": "别再因为语言障碍流失客户。",
+  "cta.desc": "每天 100 条免费翻译，无需注册。准备好了再升级——银行卡或 USDT，一键搞定。",
+  "cta.ph": "you@company.com",
+  "cta.btn": "创建账号",
+  "cta.b1": "无需绑定银行卡",
+  "cta.b2": "随时可取消",
+  "cta.b3": "GDPR + SOC2（进行中）",
+  "footer.legal": "© 2026 Franklinn · franklinn.com · 为跨境团队打造",
+  "signup.ok": "已收到——我们将向 {email} 发送一封魔法链接邮件。（演示站点：实际不会发送邮件。）",
+  "signup.plan": "已选套餐：{plan}。请输入邮箱继续。",
+  "nav.terms": "服务条款",
+  "nav.privacy": "隐私政策",
+  "ch.note": "Intercom · Zendesk · Front · Crisp 也支持通过 webhook 桥接。"
+},
+  "zh-TW": {
+  "nav.how": "如何運作",
+  "nav.ai": "AI 智能助理",
+  "nav.shield": "帳號防護盾",
+  "nav.pricing": "方案定價",
+  "nav.login": "登入",
+  "nav.faq": "常見問題",
+  "nav.demo": "試用 Demo",
+  "nav.signup": "立即開始",
+  "hero.chip": "即時翻譯 · 50+ 語言 · 帳號安全有保障",
+  "hero.t1": "用每位顧客的",
+  "hero.h": "母語溝通。",
+  "hero.desc": "Franklinn 將即時 AI 翻譯無縫整合至 Telegram、WhatsApp、Discord 和 Instagram 私訊——你的團隊用同一種語言輸入，顧客看到的是道地母語。無需切換應用程式、零延遲、不怕帳號被封。",
+  "hero.cta1": "免費試用，無需註冊 →",
+  "hero.cta2": "查看方案定價",
+  "hero.b1": "✓ 每日 100 次免費翻譯",
+  "hero.b2": "✓ 支援信用卡或 USDT 付款",
+  "hero.b3": "✓ 內建帳號防封保護",
+  "chat.name": "Keiko · 東京",
+  "chat.meta": "Telegram · 以 日本語 輸入中",
+  "chat.live": "即時",
+  "chat.m1tr": "你好，昨天的訂單什麼時候會到？",
+  "chat.m2": "嗨 Keiko，今早已出貨，預計週五送達，追蹤連結馬上給你。",
+  "chat.m3tr": "謝謝！😊",
+  "chat.ph": "用你的語言輸入，以顧客的語言傳送",
+  "chat.send": "傳送",
+  "how.chip": "如何運作",
+  "how.title": "3 分鐘，打造跨語言客服。",
+  "how.skip": "直接看 Live Demo →",
+  "how.s1t": "連接訊息管道",
+  "how.s1d": "接入 Telegram、WhatsApp Business、Discord 或 Instagram，一鍵 OAuth 授權，無需任何後端開發。",
+  "how.s2t": "團隊照常用自己的語言",
+  "how.s2d": "訊息自動翻譯成每位顧客的語言，並保有上下文記憶——名稱、俚語、產品術語全程保持一致。",
+  "how.s3t": "顧客感覺就像在地服務",
+  "how.s3d": "顧客看到母語回覆，你看到自己的語言。語氣精準調整，延遲低於 400ms，告別機器翻譯的尷尬感。",
+  "ch.chip": "支援管道",
+  "ch.title": "在顧客已經在用的地方服務他們。",
+  "ch.desc": "一個 Seat 對應一個連結帳號，可自由搭配組合——Growth 方案的小團隊就能跨區域管理 10 個管道。",
+  "demo.tag": "互動 Demo",
+  "demo.title": "直接試翻，無需註冊。",
+  "demo.desc": "輸入任何內容，即刻呈現顧客語言版本。",
+  "demo.label": "顧客使用語言",
+  "demo.ph": "Your order shipped this morning — tracking is on the way!",
+  "demo.btn": "翻譯 →",
+  "demo.outph": "翻譯結果將顯示於此…",
+  "demo.note": "Demo 使用本地詞典；正式版 Franklinn 採用專為客服場景調校的上下文感知 LLM 翻譯引擎。",
+  "ai.chip": "AI 智能助理",
+  "ai.ready": "就緒",
+  "ai.ask": "詢問",
+  "ai.ph": "詢問 Franklinn 任何關於顧客數據的問題…",
+  "ai.title": "用任何語言，問盡你的數據。",
+  "ai.desc": "Franklinn AI 索引每一則訊息、翻譯記錄與顧客互動。用自然語言直接提問——不需要 SQL，不需要手動建立報表。即刻獲得答案、圖表與一鍵執行動作。",
+  "ai.q1": "本週哪個語言的投訴數量最多？",
+  "ai.a1": "西班牙語——47 張工單（↑ 28% w/w）。主要問題：墨西哥地區出貨延遲。",
+  "ai.a1c": "tickets.language × sentiment · 7d",
+  "ai.q2": "顯示 Telegram 上回應時間最慢的客服人員。",
+  "ai.a2": "3 位客服中位回應超過 8 分鐘：Marco（11.4m）、Yui（9.2m）、Alex（8.7m）。",
+  "ai.a2c": "agents × median_reply_time · channel=telegram",
+  "ai.q3": "將最熱門的 FAQ 翻譯成韓文並儲存為快捷回覆。",
+  "ai.a3": "完成——\\\"배송 지연 안내\\\" 已儲存至 macros/ko，14 位客服人員現可使用。",
+  "ai.a3c": "macro created · team broadcast",
+  "ai.b1": "<b>自然語言查詢</b>——用你的語言提問，以顧客的語言獲得答案。",
+  "ai.b2": "<b>即時圖表</b>——情緒分析、訊息量、回應時間、依管道／語言／客服人員分類的 CSAT 一覽無遺。",
+  "ai.b3": "<b>直接採取行動</b>——建立快捷回覆、重新指派工單、發送群播，全在同一個對話介面完成。",
+  "ai.b4": "<b>預設私密保護</b>——你的數據絕不用於訓練第三方模型。",
+  "shield.chip": "帳號防護盾",
+  "shield.title": "在我們守護下，你的帳號不會被封。",
+  "shield.desc": "多數大量翻譯工具會觸發平台的機器人偵測——訊息傳太快、內容太相似、語氣太機械化。Franklinn 從底層架構就設計成讓每個平台都以為是真人在操作。",
+  "shield.p1t": "模擬真人傳送節奏",
+  "shield.p1d": "自適應延遲與輸入中提示符合各平台的有機行為模式——不會突發大量傳送，不留可疑的一致性痕跡。",
+  "shield.p2t": "住宅 IP 路由",
+  "shield.p2d": "每個 Seat 綁定你所在區域的乾淨住宅 IP，無數據中心指紋，無地理位置異常。",
+  "shield.p3t": "風格隨機化",
+  "shield.p3d": "細微的改寫與表情符號變化，防止被平台識別為垃圾訊息的重複特徵。",
+  "shield.p4t": "風險雷達",
+  "shield.p4d": "每個帳號即時健康評分，在觸發限制前預警，管道出現壓力時自動節流。",
+  "shield.s1": "帳號正常運行時間（過去 12 個月）",
+  "shield.s2": "Growth+ 方案永久封號次數",
+  "shield.s3": "風險警報中位回應時間",
+  "price.chip": "方案定價",
+  "price.title": "定價清晰透明，付款方式任你選。",
+  "price.desc": "免費開始，需要自有管道時再升級。信用卡或 USDT，隨你決定。",
+  "price.free.sub": "無需註冊",
+  "price.free.f1": "✓ 1 個沙盒 Seat",
+  "price.free.f2": "✓ 每日 100 次翻譯",
+  "price.free.f3": "✓ 50+ 種語言",
+  "price.free.f4": "· 含浮水印及 24 小時數據重置",
+  "price.free.cta": "立即試用",
+  "price.starter.sub": "個人／試用",
+  "price.starter.f1": "✓ 3 個坐席",
+  "price.starter.f2": "✓ 每月 10,000 次翻譯",
+  "price.starter.f3": "✓ 連結真實帳號",
+  "price.starter.f4": "✓ 帳號防護盾（基礎版）",
+  "price.starter.f5": "✓ AI 智能助理（100 queries）",
+  "price.popular": "最多人選擇",
+  "price.growth.sub": "小型客服團隊",
+  "price.growth.f1": "✓ 10 個坐席（$8/extra）",
+  "price.growth.f2": "✓ 無限次翻譯",
+  "price.growth.f3": "✓ 帳號防護盾 Pro",
+  "price.growth.f4": "✓ AI 智能助理（無限次）",
+  "price.growth.f5": "✓ 優先客服支援",
+  "price.scale.sub": "跨境業務營運",
+  "price.scale.f1": "✓ 50 個坐席（$5/extra）",
+  "price.scale.f2": "✓ 全功能無限制",
+  "price.scale.f3": "✓ SSO + 稽核日誌",
+  "price.scale.f4": "✓ 專屬風險雷達 + SLA 保障",
+  "price.scale.f5": "✓ 專屬 Slack 頻道支援",
+  "price.choose": "選擇方案",
+  "price.annual": "年繳方案在 Starter / Growth / Scale 可省下 20%。",
+  "pay.tag": "付款方式",
+  "pay.title": "信用卡、加密貨幣或按量付費，三種方式都行。",
+  "pay.tab1": "💳 信用卡",
+  "pay.tab2": "🪙 USDT",
+  "pay.tab3": "💧 PAYG",
+  "pay.card.t1": "主流信用卡均可使用",
+  "pay.card.d1": "Visa、Mastercard、AmEx，支援 3D Secure，由 Stripe 處理。",
+  "pay.card.t2": "每月自動扣款",
+  "pay.card.d2": "支援 USD／EUR／JPY 開立發票，依即時匯率自動換算。",
+  "pay.card.t3": "即時升級生效",
+  "pay.card.d3": "週期中途新增坐席或切換方案，系統自動按比例計費。",
+  "pay.cr.t1": "4 條鏈，全為 USDT",
+  "pay.cr.d1": "Ethereum · BNB Chain · Polygon · Tron，選手續費最低的那條。",
+  "pay.cr.t2": "秒到帳，不用等",
+  "pay.cr.d2": "1 次確認後點數即刻到帳（Tron 約 3s，ETH 約 30s）。",
+  "pay.cr.t3": "月消費 $1k/mo 以下無需 KYC",
+  "pay.cr.d3": "透過 Fireblocks 一鍵取得存款地址。需要法幣充值？我們透過 MoonPay 代為處理。",
+  "pay.pg.t1": "最低 $20 即可儲值",
+  "pay.pg.d1": "無需訂閱，餘額永不過期。",
+  "pay.pg.t2": "每次翻譯 $0.004",
+  "pay.pg.d2": "每 $1 約可發送 250 則訊息，坐席啟用期間每天計費 $0.30。",
+  "pay.pg.t3": "適合流量爆發情境",
+  "pay.pg.d3": "最適合季節性行銷活動、新品上線及臨時客服衝量需求。",
+  "faq.title": "大家真正想問的問題。",
+  "faq.q1": "你們如何確保我的帳號不被封？",
+  "faq.a1": "帳號防護盾全方位守護：模擬真人傳送節奏、每個 Seat 配置住宅 IP、風格隨機化，加上即時風險雷達在平台標記前主動節流。Growth+ 方案迄今零永久封號紀錄。",
+  "faq.q2": "免費方案真的永久有效嗎？",
+  "faq.a2": "是的。共用沙盒每日 100 次翻譯，無試用期限制。只有在連結真實帳號或超出用量上限時才需要付費。",
+  "faq.q3": "翻譯準確度如何？",
+  "faq.a3": "採用專為客服場景調校的 LLM 引擎，並具備每帳號記憶功能。約 50 則訊息後即可學習你的產品名稱、語氣與常用表達方式。",
+  "faq.q4": "信用卡還是加密貨幣，該怎麼選？",
+  "faq.a4": "信用卡 = 上手最順暢，自動扣款，標準發票。USDT = 跨境友善、無匯損、無退款爭議，月消費 $1k/mo 以下免 KYC。隨時可切換。",
+  "faq.q5": "我的數據存放在哪裡？",
+  "faq.a5": "預設存放於歐盟（法蘭克福），Scale 方案可選新加坡或美國東部節點。靜態加密保護，絕不用於訓練第三方模型。",
+  "cta.title": "別再因語言而流失顧客。",
+  "cta.desc": "每天 100 次免費翻譯，無需註冊。準備好了就升級——信用卡或 USDT，一鍵搞定。",
+  "cta.ph": "you@company.com",
+  "cta.btn": "建立帳號",
+  "cta.b1": "無需信用卡",
+  "cta.b2": "隨時取消",
+  "cta.b3": "GDPR + SOC2（進行中）",
+  "footer.legal": "© 2026 Franklinn · franklinn.com · 為跨境團隊打造",
+  "signup.ok": "已收到！我們將寄送魔法連結至 {email}。（Demo 站點：實際上不會發送電子郵件。）",
+  "signup.plan": "已選擇方案：{plan}。請輸入電子郵件繼續。",
+  "nav.terms": "服務條款",
+  "nav.privacy": "隱私權政策",
+  "ch.note": "Intercom · Zendesk · Front · Crisp 也支援透過 webhook 橋接。"
+}
+};
+
+
+// ===== Demo translation dictionary =====
+const DEMO_DICT = {
+  "your order shipped this morning — tracking is on the way!": {
+    "ja": "ご注文は今朝出荷されました。追跡番号は間もなくお送りします！",
+    "ko": "주문 상품이 오늘 아침 발송되었습니다. 송장 번호는 곧 전달드립니다!",
+    "zh-CN": "您的订单已于今早发货，运单号稍后发送！",
+    "zh-TW": "您的訂單已於今早出貨，貨運單號稍後送達！",
+    "es": "¡Tu pedido se envió esta mañana, el número de seguimiento va en camino!",
+    "fr": "Votre commande est expédiée ce matin — le suivi arrive !",
+    "de": "Ihre Bestellung ist heute Morgen verschickt worden — Sendungsnummer folgt!",
+    "ar": "تم شحن طلبك هذا الصباح — رقم التتبع في الطريق!",
+    "pt": "Seu pedido foi enviado esta manhã — o rastreamento está a caminho!"
+  },
+  "hello, when will my order arrive?": {
+    "ja": "こんにちは、注文はいつ届きますか？",
+    "ko": "안녕하세요, 주문은 언제 도착하나요?",
+    "zh-CN": "您好，我的订单什么时候到？",
+    "zh-TW": "您好，我的訂單什麼時候會到？",
+    "es": "Hola, ¿cuándo llegará mi pedido?",
+    "fr": "Bonjour, quand ma commande arrivera-t-elle ?",
+    "de": "Hallo, wann kommt meine Bestellung an?",
+    "ar": "مرحبًا، متى سيصل طلبي؟",
+    "pt": "Olá, quando meu pedido vai chegar?"
+  }
+};
+const DEMO_GENERIC = {"ja": "（翻訳）", "ko": "（번역）", "zh-CN": "（翻译）", "zh-TW": "（翻譯）", "es": "(traducción)", "fr": "(traduction)", "de": "(Übersetzung)", "ar": "(ترجمة)", "pt": "(tradução)"};
+
+// ===== i18n apply =====
+const LANG_LABEL = { "en":"EN", "zh-CN":"中文", "zh-TW":"繁中" };
+function setLang(code) {
+  if (!I18N[code]) code = "en";
+  const dict = I18N[code];
+  document.documentElement.setAttribute("data-lang", code);
+  document.documentElement.setAttribute("lang", code === "zh-CN" ? "zh-Hans" : code === "zh-TW" ? "zh-Hant" : code);
+  document.querySelectorAll("[data-i18n]").forEach(el => {
+    const k = el.getAttribute("data-i18n");
+    if (dict[k] !== undefined) el.innerHTML = dict[k];
+  });
+  document.querySelectorAll("[data-i18n-ph]").forEach(el => {
+    const k = el.getAttribute("data-i18n-ph");
+    if (dict[k] !== undefined) el.setAttribute("placeholder", dict[k]);
+  });
+  document.getElementById("lang-label").textContent = LANG_LABEL[code] || "EN";
+  try { localStorage.setItem("franklinn-lang", code); } catch(e) {}
+}
+
+// Init language (persisted or browser detect)
+(function(){
+  let pref = null;
+  try { pref = localStorage.getItem("franklinn-lang"); } catch(e){}
+  if (!pref) {
+    const nav = (navigator.language || "en").toLowerCase();
+    if (nav.startsWith("zh-tw") || nav.startsWith("zh-hant")) pref = "zh-TW";
+    else if (nav.startsWith("zh")) pref = "zh-CN";
+    else pref = "en";
+  }
+  setLang(pref);
+})();
+
+// Lang menu
+const langBtn = document.getElementById("lang-btn");
+const langMenu = document.getElementById("lang-menu");
+langBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  langMenu.classList.toggle("hidden");
+});
+document.addEventListener("click", () => langMenu.classList.add("hidden"));
+langMenu.querySelectorAll("[data-setlang]").forEach(b => {
+  b.addEventListener("click", () => {
+    setLang(b.getAttribute("data-setlang"));
+    langMenu.classList.add("hidden");
+  });
+});
+
+// ===== Demo translate =====
+document.getElementById("translate").addEventListener("click", () => {
+  const defaultSrc = "Your order shipped this morning — tracking is on the way!";
+  const src = (document.getElementById("src").value || defaultSrc).trim();
+  const lang = document.getElementById("tlang").value;
+  const out = document.getElementById("out");
+  out.innerHTML = '<span class="opacity-50">Translating…</span>';
+  setTimeout(() => {
+    const key = src.toLowerCase();
+    const hit = DEMO_DICT[key] && DEMO_DICT[key][lang];
+    const result = hit || (src + " " + (DEMO_GENERIC[lang] || ""));
+    out.innerHTML = '<div class="font-medium">' + result + '</div><div class="tiny mt-1">→ ' + src + '</div>';
+  }, 420);
+});
+
+// ===== Signup =====
+function handleSignup() {
+  const email = document.getElementById("email").value;
+  const msg = document.getElementById("signup-msg");
+  if (!email) return;
+  const tpl = (I18N[document.documentElement.getAttribute("data-lang")] || I18N.en)["signup.ok"] || "Thanks — we'll email {email} a magic link.";
+  msg.textContent = tpl.replace("{email}", email);
+  msg.classList.add("text-accent2");
+}
+
+// Plan buttons
+document.querySelectorAll("[data-plan]").forEach(el => {
+  el.addEventListener("click", () => {
+    const plan = el.getAttribute("data-plan");
+    const msg = document.getElementById("signup-msg");
+    const tpl = (I18N[document.documentElement.getAttribute("data-lang")] || I18N.en)["signup.plan"] || "Selected plan: {plan}";
+    msg.textContent = tpl.replace("{plan}", plan.toUpperCase());
+  });
+});
+
+// ===== Payment tabs =====
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const target = btn.getAttribute("data-tab");
+    document.querySelectorAll(".tab-btn").forEach(b => {
+      b.classList.remove("tab-active");
+      b.classList.add("text-ink/60");
+    });
+    btn.classList.add("tab-active");
+    btn.classList.remove("text-ink/60");
+    document.querySelectorAll(".tab-panel").forEach(p => p.classList.add("hidden"));
+    document.getElementById("pay-" + target).classList.remove("hidden");
+  });
+});
+</script>
+</body>
+</html>
