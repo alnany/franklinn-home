@@ -71,9 +71,8 @@
           <li><button data-setlang="zh-CN" class="w-full text-left px-3 py-2 rounded-lg hover:bg-paper">🇨🇳 简体中文</button></li>
         </ul>
       </div>
-      <a href="https://app.franklinn.com/login" data-i18n="nav.login" class="text-sm text-ink/70 hover:text-ink hidden sm:inline-flex">Log in</a>
       <a href="#demo" data-i18n="nav.demo" class="btn btn-ghost text-sm hidden sm:inline-flex">Try demo</a>
-      <a href="#signup" data-i18n="nav.signup" class="btn btn-primary text-sm">Get started</a>
+      <a href="https://dm.franklinn.ai" data-i18n="nav.signup" class="btn btn-primary text-sm">Get started</a>
     </div>
   </div>
 </header>
@@ -428,12 +427,11 @@
       <a href="#ai" class="hover:text-ink" data-i18n="nav.ai">AI Copilot</a>
       <a href="#shield" class="hover:text-ink" data-i18n="nav.shield">Account Shield</a>
       <a href="#pricing" class="hover:text-ink" data-i18n="nav.pricing">Pricing</a>
-      <a href="https://app.franklinn.com/login" class="hover:text-ink" data-i18n="nav.login">Log in</a>
       <a href="terms.html" class="hover:text-ink" data-i18n="nav.terms">Terms</a>
       <a href="privacy.html" class="hover:text-ink" data-i18n="nav.privacy">Privacy</a>
-      <a href="mailto:hello@franklinn.com" class="hover:text-ink">hello@franklinn.com</a>
+      <a href="mailto:hello@franklinn.ai" class="hover:text-ink">hello@franklinn.ai</a>
     </div>
-    <div class="text-xs text-ink/40" data-i18n="footer.legal">© 2026 Franklinn · franklinn.com · Made for cross-border teams</div>
+    <div class="text-xs text-ink/40" data-i18n="footer.legal">© 2026 Franklinn · franklinn.ai · Made for cross-border teams</div>
   </div>
 </footer>
 
@@ -445,7 +443,6 @@ const I18N = {
   "nav.ai": "AI Copilot",
   "nav.shield": "Account Shield",
   "nav.pricing": "Pricing",
-  "nav.login": "Log in",
   "nav.faq": "FAQ",
   "nav.demo": "Try demo",
   "nav.signup": "Get started",
@@ -592,7 +589,7 @@ const I18N = {
   "cta.b1": "No card required",
   "cta.b2": "Cancel anytime",
   "cta.b3": "GDPR + SOC2 (in progress)",
-  "footer.legal": "© 2026 Franklinn · franklinn.com · Made for cross-border teams",
+  "footer.legal": "© 2026 Franklinn · franklinn.ai · Made for cross-border teams",
   "signup.ok": "Thanks — we'll email {email} a magic link. (Demo site: no email actually sent.)",
   "signup.plan": "Selected plan: {plan}. Enter your email to continue.",
   "nav.terms": "Terms",
@@ -604,7 +601,6 @@ const I18N = {
   "nav.ai": "AI 智能助手",
   "nav.shield": "账号防护",
   "nav.pricing": "价格方案",
-  "nav.login": "登录",
   "nav.faq": "常见问题",
   "nav.demo": "立即体验",
   "nav.signup": "开始使用",
@@ -751,7 +747,7 @@ const I18N = {
   "cta.b1": "无需绑定银行卡",
   "cta.b2": "随时取消",
   "cta.b3": "符合 GDPR · SOC2 认证中",
-  "footer.legal": "© 2026 Franklinn · franklinn.com · 为跨境团队打造",
+  "footer.legal": "© 2026 Franklinn · franklinn.ai · 为跨境团队打造",
   "signup.ok": "收到——我们会把登录链接发到 {email}。（演示站点，不会真的发邮件。）",
   "signup.plan": "已选择：{plan} 套餐。请输入邮箱继续。",
   "nav.terms": "服务条款",
@@ -787,7 +783,7 @@ document.getElementById("translate").addEventListener("click", async () => {
   out.innerHTML = '<span class="opacity-50">Translating…</span>';
   btn.disabled = true;
   try {
-    const url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(src) + "&langpair=" + encodeURIComponent(source + "|" + target) + "&de=hello@franklinn.com";
+    const url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(src) + "&langpair=" + encodeURIComponent(source + "|" + target) + "&de=hello@franklinn.ai";
     const r = await fetch(url);
     const j = await r.json();
     const status = j && j.responseStatus;
